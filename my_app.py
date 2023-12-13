@@ -14,6 +14,15 @@ map_list = [
     [25.0400306, 121.5602452]
 ]
 
+chinese_address_list = [
+    "110台北市信義區松高路9號",
+    "110台北市信義區忠孝東路五段8號5樓",
+    "110台北市信義區忠孝東路五段236巷15號",
+    "110台北市信義區信義路五段7號",
+    "110台灣信義區信義路五段1號",
+    "110台北市信義區仁愛路四段505號"
+]
+
 # Haversine formula to calculate distance between two points on Earth
 def calculate_distance(lat1, lon1, lat2, lon2):
     R = 6371.0  # Earth's radius in kilometers
@@ -52,8 +61,18 @@ def index():
             new_lat = addressDoc['results'][0]['geometry']['location']['lat']
             new_lon = addressDoc['results'][0]['geometry']['location']['lng']
 
-            # 將新位置添加到 map_list
+            # 將新位置添加到 map_list 
             map_list.append([new_lat, new_lon])
+
+            #再將經緯度轉換為中文地址
+            addurl2 = f'https://maps.googleapis.com/maps/api/geocode/json?latlng={new_lat}, {new_lon}&language=zh-TW&key={google_api_key}'
+            addressReq2 = requests.get(addurl2)
+            addressDoc2 = addressReq2.json()
+            new_location = addressDoc2['results'][0]['formatted_address']
+
+            # 將新位置添加到 chinese_address_list 
+            chinese_address_list.append(new_location)
+
         else:
             address = request.form['current_address']
             google_api_key = 'AIzaSyDcI0vxTU33OBI8IlG5UUjeOtEvbg9Fh2g'  # 請將此處替換為您自己的 Google API 金鑰
@@ -83,17 +102,17 @@ def index():
             result_lat = closest_location[0]
             result_lon = closest_location[1]
             #在下面經緯度後面加入&language=zh-TW，可以把地址變中文
-            addurl2 = f'https://maps.googleapis.com/maps/api/geocode/json?latlng={result_lat}, {result_lon}&language=zh-TW&key={google_api_key}'
-            addressReq2 = requests.get(addurl2)
-            addressDoc2 = addressReq2.json()
-            closest_location = addressDoc2['results'][0]['formatted_address']
+            addurl3 = f'https://maps.googleapis.com/maps/api/geocode/json?latlng={result_lat}, {result_lon}&language=zh-TW&key={google_api_key}'
+            addressReq3 = requests.get(addurl3)
+            addressDoc3 = addressReq3.json()
+            closest_location = addressDoc3['results'][0]['formatted_address']
 
             closest_location_info = f"最接近的災害地點: {closest_location}"
             distance_info = f"離你現在位置大約 {min_distance:.2f} 公里"
 
-            return render_template('index.html', closest_location_info=closest_location_info, distance_info=distance_info)
+            return render_template('index.html', closest_location_info=closest_location_info, distance_info=distance_info,chinese_address_list=chinese_address_list)
     
-    return render_template('index.html', map_list=map_list)
+    return render_template('index.html',chinese_address_list=chinese_address_list)
     #return render_template('index.html', address_list=address_list)
 if __name__ == '__main__':
     app.run(debug=True)
