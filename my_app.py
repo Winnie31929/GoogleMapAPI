@@ -79,16 +79,17 @@ def index():
                     min_distance = distance
                     closest_location = map_list[i]
 
-            # 40.714224,-73.961452
+            # 最接近災害位置的經緯度轉中文地址
             result_lat = closest_location[0]
             result_lon = closest_location[1]
-            addurl2 = f'https://maps.googleapis.com/maps/api/geocode/json?latlng={result_lat}, {result_lon}&key={google_api_key}'
+            #在下面經緯度後面加入&language=zh-TW，可以把地址變中文
+            addurl2 = f'https://maps.googleapis.com/maps/api/geocode/json?latlng={result_lat}, {result_lon}&language=zh-TW&key={google_api_key}'
             addressReq2 = requests.get(addurl2)
             addressDoc2 = addressReq2.json()
             closest_location = addressDoc2['results'][0]['formatted_address']
 
-            closest_location_info = f"The closest accident location is at {closest_location}."
-            distance_info = f"It is approximately {min_distance:.2f} kilometers away from your current location."
+            closest_location_info = f"最接近的災害地點: {closest_location}"
+            distance_info = f"離你現在位置大約 {min_distance:.2f} 公里"
 
             return render_template('index.html', closest_location_info=closest_location_info, distance_info=distance_info)
     

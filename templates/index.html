@@ -18,11 +18,11 @@
 
     <h2>上傳新的災害位置</h2>
     <form method="post">
-        <input type="text" name="new_address" placeholder="Enter new disaster location address">
-        <input type="submit" value="Upload Location">
+        <input type="text" name="new_address" placeholder="輸入災害位置">
+        <input type="submit" value="更新">
     </form>
 
-    <h2>All Disaster Locations:</h2>
+    <h2>所有災害地點</h2>
     <ul>
         {% for location in map_list %}
      <li>Latitude: {{ location[0] }}, Longitude: {{ location[1] }}</li>
