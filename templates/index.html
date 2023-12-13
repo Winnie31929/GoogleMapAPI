@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Find Nearest Disaster Location</title>
+</head>
+<body>
+    <h1>輸入現在位置</h1>
+    <form method="post">
+        <input type="text" name="current_address" placeholder="輸入現在位置">
+        <input type="submit" value="搜尋最近的災害位置">
+    </form>
+
+    {% if closest_location_info and distance_info %}
+    <h2>結果:</h2>
+    <p>{{ closest_location_info }}</p>
+    <p>{{ distance_info }}</p>
+    {% endif %}
+
+    <h2>上傳新的災害位置</h2>
+    <form method="post">
+        <input type="text" name="new_address" placeholder="Enter new disaster location address">
+        <input type="submit" value="Upload Location">
+    </form>
+
+    <h2>All Disaster Locations:</h2>
+    <ul>
+        {% for location in map_list %}
+     <li>Latitude: {{ location[0] }}, Longitude: {{ location[1] }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
