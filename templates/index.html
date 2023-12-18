@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8" />
     <title>Find Nearest Disaster Location</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 
-    <link rel="stylesheet" type="text/css" href="templates/style.css" />
-    <script type="module" src="templates/map.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    /* Necessary styling for map container */
+    #map {
+      background: #CCC;
+      height: 400px; /* Adjust the height as needed */
+    }
+  </style>
+
 </head>
 <body>
     <h1>輸入現在位置</h1>
@@ -34,13 +42,39 @@
     </ul>
 
     <h3>My Google Maps Demo</h3>
-    <!--The div element for the map -->
-    <div id="map"></div>
+    <div class="container">
+        <div class="row">
+          <div class="col">
+            <div id="map"></div>
+          </div>
+        </div>
+    </div>
 
-    <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,
-            b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,
-            u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
-            ({key: "AIzaSyDcI0vxTU33OBI8IlG5UUjeOtEvbg9Fh2g", v: "beta"});</script>
+    <!-- Google Maps API with your API Key -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcI0vxTU33OBI8IlG5UUjeOtEvbg9Fh2g&callback=initMap" async defer></script>
+
+  <!-- JavaScript to initialize the map -->
+  <script>
+    let map;
+
+    function initMap() {
+      // Set the default location (Taipei City Hall Theater)
+      const location = { lat: 25.0374865, lng: 121.5647688 };
+
+      // Create the map
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: location,
+        zoom: 16,
+        mapTypeId: 'terrain'
+      });
+
+      // Place a marker
+      const marker = new google.maps.Marker({
+        position: location,
+        map: map
+      });
+    }
+  </script>
 
 </body>
 </html>
