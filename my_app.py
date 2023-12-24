@@ -113,6 +113,6 @@ def index():
             return render_template('index.html', closest_location_info=closest_location_info, distance_info=distance_info,chinese_address_list=chinese_address_list)
     
     return render_template('index.html',chinese_address_list=chinese_address_list)
-    #return render_template('index.html', address_list=address_list)
+    
 if __name__ == '__main__':
     app.run(debug=True)
