@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import requests
 from math import radians, sin, cos, sqrt, atan2
 
@@ -114,5 +114,10 @@ def index():
     
     return render_template('index.html',chinese_address_list=chinese_address_list)
     
+
+@app.route('/get_variable')
+def get_variable():
+    return jsonify({'variable': map_list, 'variable2': chinese_address_list})
+
 if __name__ == '__main__':
     app.run(debug=True)

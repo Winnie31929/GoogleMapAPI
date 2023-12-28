@@ -54,12 +54,16 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDcI0vxTU33OBI8IlG5UUjeOtEvbg9Fh2g&callback=initMap" async defer></script>
 
   <!-- JavaScript to initialize the map -->
+    
+
   <script>
     let map;
-
+    
+    
+    
+    
     function initMap() {
       // Set the default location (Taipei City Hall Theater)
-      //const location = { lat: 25.0374865, lng: 121.5647688 };
       const center = { lat: 25.0374865, lng: 121.5647688 };
       // Create the map
       map = new google.maps.Map(document.getElementById('map'), {
@@ -67,49 +71,38 @@
         zoom: 15,
         mapTypeId: 'terrain'
       });
-
-      locations = [
-      {
-        position: { lat: 25.0397146, lng: 121.5653771 },
-        map: map,
-        title: "location 1"
-      },
-      {
-        position: { lat: 25.0405919, lng: 121.5647644 },
-        map: map,
-        title: "location 2"
-      },
-      {
-        position: { lat: 25.039982, lng: 121.572258 },
-        map: map,
-        title: "location 3"
-      },
-      {
-        position: { lat: 25.0336076, lng: 121.5647587 },
-        map: map,
-        title: "location 4"
-      },
-      {
-        position: { lat: 25.033263, lng: 121.560492 },
-        map: map,
-        title: "location 5"
-      },
-      {
-        position: { lat: 25.0400306, lng: 121.5602452 },
-        map: map,
-        title: "location 6"
-      }
-      ]
-
-      // Place a marker
-      for (var i= 0; locations.length >i ; i++) {
-        marker = new google.maps.Marker(locations[i]);
-      }
-      /*const marker = new google.maps.Marker({
-        position: location,
-        map: map
-      });*/
+      // 使用 AJAX 請求獲取 Python 變數的值
+      //locations 放災害地點
+      var locations = [];
+      
+      fetch('/get_variable')
+        .then(response => response.json())//把資料轉成JSON格式
+        .then(data => {
+            //jsVariable = map_list
+            var jsVariable = data.variable;
+            //titleList = chineae_address_list
+            var titleList = data.variable2;
+            // 印在console做檢查用
+            console.log(jsVariable);
+            console.log(titleList);
+            //將每個地點加入locations
+            for (var i= 0; jsVariable.length >i ; i++) {
+              locations[i] = {
+                position: { lat: jsVariable[i][0], lng: jsVariable[i][1] },
+                map: map,
+                title: titleList[i]
+              };
+            } 
+            // 檢查用
+            console.log(locations);
+            // Place markers
+            for (var i= 0; locations.length >i ; i++) {
+              marker = new google.maps.Marker(locations[i]);
+            }
+        });
+ 
     }
+    
   </script>
 
 </body>
