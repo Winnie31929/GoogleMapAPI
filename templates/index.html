@@ -73,6 +73,7 @@
     var startMarker;
     var endMarker;
     var routeLine;
+    var avoidareas;
     var locations = [];
     var orig_list = [];
     var dest_list = [];
@@ -132,14 +133,14 @@
     }
 
     function getAvoidAreaParameter(map_list) {
-      let avoidareas = '';
+      let ar = '';
       for (let i = 0; i < map_list.length; i ++) {
         if (i !== 0) {
-          avoidareas += '!';
+          ar += '!';
         }
-        avoidareas += (map_list[i].position.lat + 0.01) + ',' + (map_list[i].position.lng - 0.01) + ';' + (map_list[i].position.lat - 0.01) + ',' + (map_list[i].position.lng + 0.01);
+        ar += (map_list[i].position.lat + 0.01) + ',' + (map_list[i].position.lng - 0.01) + ';' + (map_list[i].position.lat - 0.01) + ',' + (map_list[i].position.lng + 0.01);
       }
-      return avoidareas;
+      return ar;
     }
 
     function handleRouteFormSubmission(orig_list, dest_list) {
@@ -151,18 +152,20 @@
       let origin = { lat: orig_list[0], lng: orig_list[1] };
       let destination = { lat: dest_list[0], lng: dest_list[1] };
       // Create the parameters for the routing request:
-      const routingParameters = {
+      var routingParameters = {
         'routingMode': 'fast',
         'transportMode': 'car',
         'origin': `${origin.lat},${origin.lng}`,
         // The end point of the route:
         'destination': `${destination.lat},${destination.lng}`,
         // Include the route shape in the response
-        'return': 'polyline',
+        'return': 'polyline'
       };
       routingParameters.avoidareas = getAvoidAreaParameter(locations);
+      console.log(routingParameters);
       const onResult = function(result) {
         if (result.routes.length) {
+          console.log(result)
           const herePolyline = result.routes[0].sections[0].polyline;
           const encodedPolyline = decode(herePolyline);
           var polylineList = [];
